@@ -89,16 +89,18 @@ def _cmd_plan_check(args: argparse.Namespace) -> int:
         print(json.dumps(rows, ensure_ascii=False, indent=2))
         return 0
 
-    print("| # | Phase | Complexity | Recommended Model | Tier | Cost/Task | Score | Task |")
-    print("| :- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |")
+    print("| # | Phase | Complexity | Recommended Model | Tier | Cost/Task | Model Score | Reason | Task |")
+    print("| :- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |")
     for r in rows:
         rec = r["recommended"] or {}
         name = rec.get("name", "N/A")
         level = rec.get("level", "-")
         cost = f"${rec['cost']:.2f}" if "cost" in rec else "-"
         score = f"{rec['score']:.1f}" if "score" in rec else "-"
-        task_short = (r["task"][:55] + "...") if len(r["task"]) > 58 else r["task"]
-        print(f"| {r['step']} | {r['phase']} | {r['complexity']} | {name} | {level} | {cost} | {score} | {task_short} |")
+        comp_label = f"{r['complexity']} ({r.get('complexity_score', '-')})"
+        reason_str = ", ".join(r.get("reasons", []))
+        task_short = (r["task"][:42] + "...") if len(r["task"]) > 45 else r["task"]
+        print(f"| {r['step']} | {r['phase']} | {comp_label} | {name} | {level} | {cost} | {score} | {reason_str} | {task_short} |")
     return 0
 
 

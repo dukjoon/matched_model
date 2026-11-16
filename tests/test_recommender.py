@@ -49,6 +49,18 @@ class TestRecommender(unittest.TestCase):
         self.assertEqual(rows[1]["phase"], "implement")
         self.assertEqual(rows[2]["phase"], "debug")
         self.assertEqual(rows[3]["phase"], "trivial")
+        self.assertIn("complexity_score", rows[0])
+        self.assertTrue(len(rows[0]["reasons"]) >= 1)
+
+    def test_plan_structural_complexity_elevation(self) -> None:
+        sample_plan = """
+        ## Security & Auth Migration
+        - [MODIFY] Update src/auth/jwt.py, src/auth/session.py, src/db/migrations/001.sql, src/api/login.py, src/api/logout.py
+        """
+        rows = analyze_plan_markdown(sample_plan, self.data["models"])
+        self.assertEqual(rows[1]["complexity"], "critical")
+        self.assertGreaterEqual(rows[1]["complexity_score"], 80)
+        self.assertTrue(any("broad scope" in r for r in rows[1]["reasons"]))
 
 
 if __name__ == "__main__":

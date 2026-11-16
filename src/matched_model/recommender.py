@@ -173,9 +173,17 @@ def recommend_model(
     )
 
 
-def _classify_task_text(text: str) -> tuple[str, str]:
-    """Heuristically classify a plan task line into (phase, complexity)."""
+def _classify_task_text(
+    text: str,
+    section_context: str = "",
+    file_refs_count: int = 0,
+    has_destructive_tag: bool = False,
+) -> tuple[str, str, int, list[str]]:
+    """Classify a plan task into (phase, complexity, complexity_score_0_100, reasons)."""
     lower = text.lower()
+    ctx_lower = f"{section_context} {text}".lower()
+    reasons: list[str] = []
+
     if any(k in lower for k in ("architect", "design", "schema", "plan", "rfc", "trade-off", "설계", "아키텍처")):
         phase = "plan"
     elif any(k in lower for k in ("debug", "fix", "bug", "error", "incident", "test", "verify", "디버그", "테스트", "검증")):
@@ -185,18 +193,59 @@ def _classify_task_text(text: str) -> tuple[str, str]:
     else:
         phase = "implement"
 
-    if any(k in lower for k in ("security", "auth", "migration", "concurrency", "distributed", "core", "critical", "보안", "마이그레이션")):
-        complexity = "critical"
-    elif any(k in lower for k in ("refactor", "pipeline", "engine", "integration", "multi-file", "리팩토링", "파이프라인", "엔진")):
-        complexity = "high"
-    elif phase == "trivial":
-        complexity = "trivial"
+    score = 42  # medium baseline
+
+    # 1. Risk & domain complexity signals
+    if any(k in ctx_lower for k in ("security", "auth", "migration", "concurrency", "distributed", "보안", "마이그레이션", "인증")):
+        score += 36
+        reasons.append("high-risk domain (auth/security/migration)")
+    elif any(k in ctx_lower for k in ("architect", "schema", "pipeline", "engine", "integration", "아키텍처", "파이프라인", "엔진")):
+        score += 22
+        reasons.append("system/architecture design")
+    elif any(k in ctx_lower for k in ("refactor", "multi-file", "core", "api", "state", "리팩토링", "핵심")):
+        score += 14
+        reasons.append("core logic / refactoring")
+
+    # 2. Structural blast radius (files, [MODIFY]/[DELETE] tags, section context)
+    if file_refs_count >= 5:
+        score += 22
+        reasons.append(f"broad scope ({file_refs_count} files)")
+    elif file_refs_count >= 2:
+        score += 12
+        reasons.append(f"multi-file ({file_refs_count} files)")
+
+    if has_destructive_tag:
+        score += 10
+        reasons.append("modify/delete tag")
+
+    # 3. Low-complexity / trivial signals
+    if phase == "trivial":
+        score -= 28
+        reasons.append("docs/formatting")
     elif any(k in lower for k in ("simple", "helper", "config", "button", "css", "단순", "설정")):
+        score -= 14
+        reasons.append("localized helper/config")
+
+    score = max(0, min(100, score))
+
+    if score >= 80:
+        complexity = "critical"
+    elif score >= 60:
+        complexity = "high"
+    elif score >= 40:
+        complexity = "medium"
+    elif score >= 20:
         complexity = "low"
     else:
-        complexity = "medium"
+        complexity = "trivial"
 
-    return phase, complexity
+    if not reasons:
+        reasons.append("standard implementation task")
+
+    return phase, complexity, score, reasons
+
+
+_FILE_REF_RE = re.compile(r"(?:[\w.-]+/[\w./-]+|[\w.-]+\.(?:py|ts|tsx|js|jsx|json|yaml|yml|md|sql|sh))")
 
 
 def analyze_plan_markdown(
@@ -204,19 +253,48 @@ def analyze_plan_markdown(
     models: list[dict[str, Any]],
     harness: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Extract tasks from a Markdown plan and recommend a model+tier per task."""
-    tasks: list[str] = []
-    for line in plan_text.splitlines():
+    """Extract tasks with section context & file-scope signals and recommend a model+tier per task."""
+    current_section = ""
+    raw_items: list[tuple[str, str, int, bool]] = []
+    lines = plan_text.splitlines()
+
+    # Pre-scan file references per heading section
+    section_files: dict[str, set[str]] = {}
+    scan_section = ""
+    for line in lines:
+        s = line.strip()
+        if re.match(r"^#{2,4}\s+", s):
+            scan_section = re.sub(r"^#{2,4}\s+", "", s).strip()
+            section_files.setdefault(scan_section, set())
+        else:
+            section_files.setdefault(scan_section, set()).update(_FILE_REF_RE.findall(s))
+
+    for line in lines:
         stripped = line.strip()
-        if re.match(r"^(#{2,4}\s+|[-*]\s+|\d+\.\s+)", stripped):
-            clean = re.sub(r"^(#{2,4}\s+|[-*]\s+|\d+\.\s+)", "", stripped).strip()
+        if re.match(r"^#{2,4}\s+", stripped):
+            current_section = re.sub(r"^#{2,4}\s+", "", stripped).strip()
+            if len(current_section) >= 6:
+                sec_files = len(section_files.get(current_section, set()))
+                has_tag = any(t in current_section for t in ("[MODIFY]", "[DELETE]", "[NEW]"))
+                raw_items.append((current_section, "", sec_files, has_tag))
+        elif re.match(r"^(?:[-*]\s+|\d+\.\s+)", stripped):
+            clean = re.sub(r"^(?:[-*]\s+|\d+\.\s+)", "", stripped).strip()
             clean = re.sub(r"^\[[ xX]\]\s*", "", clean)
             if len(clean) >= 6:
-                tasks.append(clean)
+                line_files = _FILE_REF_RE.findall(clean)
+                sec_files = len(section_files.get(current_section, set()))
+                total_files = max(len(line_files), sec_files if len(line_files) == 0 else len(line_files))
+                has_tag = any(t in clean for t in ("[MODIFY]", "[DELETE]"))
+                raw_items.append((clean, current_section, total_files, has_tag))
 
     results: list[dict[str, Any]] = []
-    for idx, task in enumerate(tasks[:25], start=1):
-        phase, complexity = _classify_task_text(task)
+    for idx, (task, sec_ctx, file_cnt, has_tag) in enumerate(raw_items[:25], start=1):
+        phase, complexity, comp_score, reasons = _classify_task_text(
+            task,
+            section_context=sec_ctx,
+            file_refs_count=file_cnt,
+            has_destructive_tag=has_tag,
+        )
         rec = recommend_model(models, phase=phase, complexity=complexity, harness=harness)
         results.append(
             {
@@ -224,6 +302,8 @@ def analyze_plan_markdown(
                 "task": task,
                 "phase": phase,
                 "complexity": complexity,
+                "complexity_score": comp_score,
+                "reasons": reasons,
                 "profile": rec.profile_used,
                 "recommended": rec.primary,
             }
