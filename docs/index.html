@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>matched_model — AI Model Right-Sizing & Multi-Benchmark Dashboard</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #090d16;
+      --bg-card: #131b2e;
+      --bg-inner: #0d1322;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #222f49;
+      --accent: #38bdf8;
+      --openai-green: #10b981;
+      --warn: #f59e0b;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pretendard", sans-serif;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      padding: 20px 24px;
+    }
+    header {
+      max-width: 1600px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 11px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .badge.green {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .meta-strip {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .layout-grid {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 20px;
+    }
+    @media (max-width: 1240px) {
+      .layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .chart-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button.btn, select.ctrl-select {
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button.btn:hover {
+      background: #334155;
+    }
+    button.btn.active {
+      background: var(--accent);
+      color: #041221;
+      font-weight: 600;
+      border-color: var(--accent);
+    }
+    #chart {
+      width: 100%;
+      height: 640px;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sim-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sim-field label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .sim-field select {
+      width: 100%;
+    }
+    .sim-result {
+      background: var(--bg-inner);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .sim-result strong {
+      color: var(--accent);
+    }
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .preset-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .preset-btn:hover {
+      background: var(--accent);
+      color: #090d16;
+      font-weight: 600;
+    }
+    .model-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .model-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      background: var(--bg-inner);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .model-item:hover {
+      background: #17223b;
+    }
+    .model-item.codex-highlight {
+      border-left: 3px solid var(--openai-green);
+    }
+    .model-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .src-pill {
+      font-size: 10px;
+      color: var(--text-muted);
+      background: #1e293b;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .custom-check {
+      accent-color: var(--accent);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+    .table-container {
+      overflow-x: auto;
+      max-height: 210px;
+      overflow-y: auto;
+    }
+    table.compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+    table.compare-table th {
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      padding: 6px 4px;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+    }
+    table.compare-table td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #1a253a;
+      color: #e2e8f0;
+    }
+    .score-badge {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>
+        matched_model — AI Right-Sizing Benchmark
+        <span class="badge">Low → Max Reasoning</span>
+        <span class="badge green" id="freshness-badge">Loading...</span>
+      </h1>
+      <p class="subtitle">
+        DeepSWE · Artificial Analysis · SWE-bench · LiveBench · Aider · Terminal-Bench · LMSYS 영역별 가중 재계산 지표
+      </p>
+    </div>
+    <div class="meta-strip" id="source-strip"></div>
+  </header>
+
+  <div class="layout-grid">
+    <div class="chart-card">
+      <div class="controls-bar">
+        <div class="btn-group">
+          <span style="font-size: 12px; color: var(--text-muted);">평가 영역:</span>
+          <select id="profile-select" class="ctrl-select" onchange="onProfileChange()">
+            <option value="composite">Composite (종합 지능)</option>
+            <option value="plan">Plan (설계 · 추론)</option>
+            <option value="implement">Implement (코드 구현 · 편집)</option>
+            <option value="debug">Debug (에이전트 · CLI 디버깅)</option>
+            <option value="trivial">Trivial (단순 문서 · 보일러플레이트)</option>
+          </select>
+        </div>
+        <div class="btn-group">
+          <button id="btn-log" class="btn active" onclick="setXScale('log')">Log Scale</button>
+          <button id="btn-linear" class="btn" onclick="setXScale('linear')">Linear Scale</button>
+          <button id="btn-pareto" class="btn active" onclick="togglePareto()">Pareto Frontier</button>
+          <button class="btn" onclick="Plotly.relayout('chart', {'xaxis.autorange': true, 'yaxis.autorange': true})">줌 초기화</button>
+        </div>
+      </div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="sidebar">
+      <!-- 적정 모델 시뮬레이터 -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>적정기술 모델 시뮬레이터 (Plan → Implement)</span>
+        </div>
+        <div class="sim-grid">
+          <div class="sim-field">
+            <label for="sim-phase">작업 단계 (Phase)</label>
+            <select id="sim-phase" class="ctrl-select" onchange="runSimulator()">
+              <option value="plan">Plan (설계/계획)</option>
+              <option value="implement" selected>Implement (구현)</option>
+              <option value="debug">Debug (디버깅/테스트)</option>
+              <option value="trivial">Trivial (문서/단순작업)</option>
+            </select>
+          </div>
+          <div class="sim-field">
+            <label for="sim-complexity">복잡도 (Complexity)</label>
+            <select id="sim-complexity" class="ctrl-select" onchange="runSimulator()">
+              <option value="trivial">Trivial (하한 24)</option>
+              <option value="low">Low (하한 40)</option>
+              <option value="medium" selected>Medium (하한 49)</option>
+              <option value="high">High (하한 56)</option>
+              <option value="critical">Critical (하한 62)</option>
+            </select>
+          </div>
+        </div>
+        <div class="sim-result" id="sim-output">계산 중...</div>
+      </div>
+
+      <!-- 모델 선택기 -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>비교 모델 필터링</span>
+          <span id="selected-count" style="font-size: 12px; color: var(--accent);">0개 선택됨</span>
+        </div>
+
+        <div class="preset-chips">
+          <button class="preset-btn" onclick="applyPreset('codex_only')">🟢 Codex CLI</button>
+          <button class="preset-btn" onclick="applyPreset('pareto_top')">⭐ 효율 프론티어</button>
+          <button class="preset-btn" onclick="applyPreset('flagship')">SOTA 플래그십</button>
+          <button class="preset-btn" onclick="applyPreset('all')">전체 선택</button>
+          <button class="preset-btn" onclick="applyPreset('none')">전체 해제</button>
+        </div>
+
+        <div class="model-list" id="model-checkbox-list"></div>
+      </div>
+
+      <!-- 요약 비교표 -->
+      <div class="panel">
+        <div class="panel-title">선택 모델 비용 & 영역 점수</div>
+        <div class="table-container">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>모델명</th>
+                <th>비용 ($)</th>
+                <th>점수 (Low~Max)</th>
+              </tr>
+            </thead>
+            <tbody id="summary-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const COMPLEXITY_FLOORS = { trivial: 24, low: 40, medium: 49, high: 56, critical: 62 };
+
+    let benchmarkData = null;
+    let currentProfile = "composite";
+    let showPareto = true;
+    let currentScale = "log";
+    let recommendedPoint = null;
+
+    async function loadData() {
+      try {
+        const res = await fetch("./data/benchmarks.json");
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        benchmarkData = await res.json();
+      } catch (err) {
+        console.warn("Falling back to minimal inline snapshot:", err);
+        benchmarkData = {
+          lastUpdated: "inline-fallback",
+          sourceStatus: {},
+          models: [
+            {
+              id: "gpt-6.1-sol", isCodex: true, name: "Codex: GPT-6.1 Sol", color: "#10b981", sources: ["manual"],
+              steps: [
+                { level: "Low", cost: 0.16, score: 48.0, profileScores: { composite: 48.0, plan: 46.5, implement: 49.1, debug: 48.2, trivial: 48.5 } },
+                { level: "Med", cost: 0.65, score: 51.5, profileScores: { composite: 51.5, plan: 50.0, implement: 52.5, debug: 51.8, trivial: 52.0 } },
+                { level: "High", cost: 1.05, score: 53.5, profileScores: { composite: 53.5, plan: 52.0, implement: 54.5, debug: 53.8, trivial: 54.0 } },
+                { level: "Max", cost: 1.50, score: 55.0, profileScores: { composite: 55.0, plan: 53.5, implement: 56.0, debug: 55.2, trivial: 55.5 } }
+              ]
+            }
+          ]
+        };
+      }
+      initDashboard();
+    }
+
+    function getStepScore(step, profile) {
+      return (step.profileScores && step.profileScores[profile] !== undefined)
+        ? step.profileScores[profile]
+        : step.score;
+    }
+
+    function initDashboard() {
+      const updated = (benchmarkData.lastUpdated || "").slice(0, 10);
+      document.getElementById("freshness-badge").innerText = `Updated: ${updated}`;
+
+      const strip = document.getElementById("source-strip");
+      const sources = benchmarkData.sourceStatus || {};
+      strip.innerHTML = Object.entries(sources)
+        .map(([k, v]) => `<span>${k}: <b>${v.count}</b> (${v.status})</span>`)
+        .join(" · ");
+
+      const listEl = document.getElementById("model-checkbox-list");
+      listEl.innerHTML = "";
+      benchmarkData.models.forEach((m, idx) => {
+        const item = document.createElement("div");
+        item.className = `model-item ${m.isCodex ? "codex-highlight" : ""}`;
+        const srcCount = (m.sources || []).length;
+        item.innerHTML = `
+          <label class="model-label" for="chk-${idx}">
+            <span class="color-dot" style="background-color: ${m.color};"></span>
+            <span>${m.name}</span>
+          </label>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="src-pill">${srcCount} src</span>
+            <input type="checkbox" id="chk-${idx}" class="custom-check model-chk" data-index="${idx}" checked>
+          </div>
+        `;
+        listEl.appendChild(item);
+      });
+
+      document.querySelectorAll(".model-chk").forEach(chk => {
+        chk.addEventListener("change", renderAll);
+      });
+
+      runSimulator();
+    }
+
+    function computeParetoPoints(models, profile) {
+      const pts = [];
+      models.forEach(m => {
+        m.steps.forEach(s => {
+          pts.push({ cost: s.cost, score: getStepScore(s, profile), name: m.name, level: s.level });
+        });
+      });
+      pts.sort((a, b) => a.cost - b.cost || b.score - a.score);
+      const frontier = [];
+      let best = -Infinity;
+      pts.forEach(p => {
+        if (p.score > best + 1e-6) {
+          frontier.push(p);
+          best = p.score;
+        }
+      });
+      return frontier;
+    }
+
+    function renderAll() {
+      const chks = document.querySelectorAll(".model-chk");
+      const selected = [];
+      chks.forEach(c => {
+        if (c.checked) selected.push(benchmarkData.models[parseInt(c.dataset.index)]);
+      });
+
+      document.getElementById("selected-count").innerText = `${selected.length}개 선택됨`;
+      renderSummaryTable(selected);
+
+      const traces = selected.map(m => {
+        const x = m.steps.map(s => s.cost);
+        const y = m.steps.map(s => getStepScore(s, currentProfile));
+        const text = m.steps.map((s, i) =>
+          `<b>${m.name}</b><br>추론 강도: <b>${s.level}</b><br>비용: $${s.cost.toFixed(2)}<br>${currentProfile} 점수: ${y[i].toFixed(1)}`
+        );
+        return {
+          name: m.name,
+          x, y, text,
+          hoverinfo: "text",
+          mode: "lines+markers",
+          type: "scatter",
+          line: { color: m.color, width: 2.3, shape: "spline" },
+          marker: { color: m.color, size: [7, 10, 13, 17], line: { color: "#fff", width: 1.2 } }
+        };
+      });
+
+      if (showPareto && selected.length > 0) {
+        const frontier = computeParetoPoints(selected, currentProfile);
+        traces.push({
+          name: "Pareto Frontier",
+          x: frontier.map(p => p.cost),
+          y: frontier.map(p => p.score),
+          text: frontier.map(p => `⭐ Pareto Optimal<br>${p.name} [${p.level}]<br>$${p.cost.toFixed(2)} / ${p.score.toFixed(1)}`),
+          hoverinfo: "text",
+          mode: "lines+markers",
+          type: "scatter",
+          line: { color: "#facc15", width: 2, dash: "dot" },
+          marker: { color: "#facc15", size: 8, symbol: "diamond" }
+        });
+      }
+
+      if (recommendedPoint) {
+        traces.push({
+          name: "Right-Sized Pick",
+          x: [recommendedPoint.cost],
+          y: [recommendedPoint.score],
+          text: [`🎯 적정 모델 추천<br><b>${recommendedPoint.name} [${recommendedPoint.level}]</b><br>$${recommendedPoint.cost.toFixed(2)} / ${recommendedPoint.score.toFixed(1)}`],
+          hoverinfo: "text",
+          mode: "markers",
+          type: "scatter",
+          marker: { color: "#38bdf8", size: 20, symbol: "star", line: { color: "#ffffff", width: 2 } }
+        });
+      }
+
+      const layout = {
+        paper_bgcolor: "#131b2e",
+        plot_bgcolor: "#131b2e",
+        margin: { l: 60, r: 30, t: 20, b: 60 },
+        showlegend: false,
+        xaxis: {
+          title: { text: "Average Cost per Task (USD)", font: { color: "#cbd5e1", size: 12 } },
+          type: currentScale,
+          autorange: true,
+          gridcolor: "#222f49",
+          tickfont: { color: "#94a3b8" },
+          tickprefix: "$"
+        },
+        yaxis: {
+          title: { text: `Score — ${currentProfile.toUpperCase()}`, font: { color: "#cbd5e1", size: 12 } },
+          autorange: true,
+          gridcolor: "#222f49",
+          tickfont: { color: "#94a3b8" }
+        },
+        hoverlabel: { bgcolor: "#090d16", bordercolor: "#38bdf8", font: { color: "#f8fafc", size: 12 } }
+      };
+
+      Plotly.newPlot("chart", traces, layout, { responsive: true, displaylogo: false });
+    }
+
+    function renderSummaryTable(selected) {
+      const tbody = document.getElementById("summary-table-body");
+      tbody.innerHTML = "";
+      if (selected.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#64748b; padding:16px;">선택된 모델이 없습니다.</td></tr>`;
+        return;
+      }
+      selected.forEach(m => {
+        const low = m.steps[0];
+        const max = m.steps[m.steps.length - 1];
+        const sLow = getStepScore(low, currentProfile);
+        const sMax = getStepScore(max, currentProfile);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="color-dot" style="background-color:${m.color};"></span> <b>${m.name}</b></td>
+          <td>$${low.cost.toFixed(2)} ~ $${max.cost.toFixed(2)}</td>
+          <td><span class="score-badge">${sLow.toFixed(1)}</span> ~ <span class="score-badge">${sMax.toFixed(1)}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function runSimulator() {
+      const phase = document.getElementById("sim-phase").value;
+      const comp = document.getElementById("sim-complexity").value;
+      const floor = COMPLEXITY_FLOORS[comp] || 49;
+      const prof = (comp === "trivial" && phase !== "plan" && phase !== "debug") ? "trivial" : phase;
+
+      const allPts = [];
+      benchmarkData.models.forEach(m => {
+        m.steps.forEach(s => {
+          allPts.push({ id: m.id, name: m.name, level: s.level, cost: s.cost, score: getStepScore(s, prof) });
+        });
+      });
+
+      const qualifying = allPts.filter(p => p.score >= floor).sort((a, b) => a.cost - b.cost || b.score - a.score);
+      const outEl = document.getElementById("sim-output");
+
+      if (qualifying.length > 0) {
+        const pick = qualifying[0];
+        recommendedPoint = { ...pick, score: getStepScore(benchmarkData.models.find(m => m.id === pick.id).steps.find(s => s.level === pick.level), currentProfile) };
+        outEl.innerHTML = `
+          <div>추천 모델: <strong>${pick.name} [${pick.level}]</strong></div>
+          <div>예상 비용: <b>$${pick.cost.toFixed(2)}</b>/task · ${prof} 점수: <b>${pick.score.toFixed(1)}</b> (기준 ≥ ${floor})</div>
+        `;
+      } else {
+        allPts.sort((a, b) => b.score - a.score);
+        const best = allPts[0];
+        recommendedPoint = best;
+        outEl.innerHTML = `
+          <div style="color:#fbbf24;">⚠️ 기준 점수(${floor}) 이상 모델 없음 — 최고 성능 대체:</div>
+          <div><strong>${best.name} [${best.level}]</strong> ($${best.cost.toFixed(2)}, 점수 ${best.score.toFixed(1)})</div>
+        `;
+      }
+      renderAll();
+    }
+
+    function onProfileChange() {
+      currentProfile = document.getElementById("profile-select").value;
+      runSimulator();
+    }
+
+    function setXScale(scaleType) {
+      currentScale = scaleType;
+      document.getElementById("btn-log").classList.toggle("active", scaleType === "log");
+      document.getElementById("btn-linear").classList.toggle("active", scaleType === "linear");
+      renderAll();
+    }
+
+    function togglePareto() {
+      showPareto = !showPareto;
+      document.getElementById("btn-pareto").classList.toggle("active", showPareto);
+      renderAll();
+    }
+
+    function applyPreset(type) {
+      const chks = document.querySelectorAll(".model-chk");
+      chks.forEach(c => {
+        const m = benchmarkData.models[parseInt(c.dataset.index)];
+        if (type === "all") c.checked = true;
+        else if (type === "none") c.checked = false;
+        else if (type === "codex_only") c.checked = !!m.isCodex;
+        else if (type === "flagship") c.checked = ["gpt-6-astra", "claude-opus-5.5", "gemini-4-carbon"].includes(m.id);
+        else if (type === "pareto_top") c.checked = m.steps.some(s => s.isPareto);
+      });
+      renderAll();
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

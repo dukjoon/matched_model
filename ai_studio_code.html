@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex CLI & Frontier AI Agent Intelligence vs Cost Benchmark</title>
+  <!-- Plotly.js 최신 CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #090d16;
+      --bg-card: #131b2e;
+      --bg-inner: #0d1322;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #222f49;
+      --accent: #38bdf8;
+      --openai-green: #10b981;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pretendard", sans-serif;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      padding: 20px 24px;
+    }
+    header {
+      max-width: 1600px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      font-size: 11px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .layout-grid {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+    }
+    @media (max-width: 1240px) {
+      .layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .chart-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    button.btn {
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button.btn:hover {
+      background: #334155;
+    }
+    button.btn.active {
+      background: var(--accent);
+      color: #041221;
+      font-weight: 600;
+      border-color: var(--accent);
+    }
+    #chart {
+      width: 100%;
+      height: 650px;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .preset-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .preset-btn:hover {
+      background: var(--accent);
+      color: #090d16;
+      font-weight: 600;
+    }
+    .model-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 290px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .model-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: var(--bg-inner);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .model-item:hover {
+      background: #17223b;
+    }
+    .model-item.codex-highlight {
+      border-left: 3px solid var(--openai-green);
+    }
+    .model-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .custom-check {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .table-container {
+      overflow-x: auto;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    table.compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+    table.compare-table th {
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      padding: 6px 4px;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+    }
+    table.compare-table td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #1a253a;
+      color: #e2e8f0;
+    }
+    table.compare-table tr:hover td {
+      background: #17223b;
+    }
+    .score-badge {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>
+        Codex CLI & Frontier AI Intelligence vs Cost
+        <span class="badge">Low → Max Reasoning</span>
+      </h1>
+      <p class="subtitle">
+        Codex CLI 지원 모델(6.1 Sol, 6 Astra, 6.1 Terra, 6 Sol, 6 Luna) 및 타사 프론티어 에이전트 다자 비교
+      </p>
+    </div>
+  </header>
+
+  <div class="layout-grid">
+    <!-- 메인 차트 카드 -->
+    <div class="chart-card">
+      <div class="controls-bar">
+        <div class="btn-group">
+          <span style="font-size: 12px; color: var(--text-muted);">X축 스케일:</span>
+          <button id="btn-log" class="btn active" onclick="setXScale('log')">Log Scale (비용 격차 직관화)</button>
+          <button id="btn-linear" class="btn" onclick="setXScale('linear')">Linear Scale (절대금액 비교)</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn" onclick="Plotly.relayout('chart', {'xaxis.autorange': true, 'yaxis.autorange': true})">줌 초기화</button>
+        </div>
+      </div>
+      <div id="chart"></div>
+    </div>
+
+    <!-- 우측 인터랙티브 컨트롤 패널 -->
+    <div class="sidebar">
+      
+      <!-- 모델 선택기 -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>비교 모델 필터링</span>
+          <span id="selected-count" style="font-size: 12px; color: var(--accent);">0개 선택됨</span>
+        </div>
+
+        <!-- 빠른 선택 프리셋 버튼 -->
+        <div class="preset-chips">
+          <button class="preset-btn" onclick="applyPreset('codex_only')">🟢 Codex CLI 5종만</button>
+          <button class="preset-btn" onclick="applyPreset('sol_vs_sol')">⚡ 6.1 Sol vs 6 Sol</button>
+          <button class="preset-btn" onclick="applyPreset('all')">전체 선택</button>
+          <button class="preset-btn" onclick="applyPreset('none')">전체 해제</button>
+          <button class="preset-btn" onclick="applyPreset('flagship')">SOTA 플래그십</button>
+        </div>
+
+        <!-- 체크박스 리스트 -->
+        <div class="model-list" id="model-checkbox-list"></div>
+      </div>
+
+      <!-- 실시간 요약 비교표 -->
+      <div class="panel">
+        <div class="panel-title">선택 모델 비용 & 지능 요약 (Low ~ Max)</div>
+        <div class="table-container">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>모델명</th>
+                <th>작업당 비용 ($)</th>
+                <th>지능 지수</th>
+              </tr>
+            </thead>
+            <tbody id="summary-table-body">
+              <!-- 선택된 모델 동적 주입 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // 모델 전체 데이터 (Artificial Analysis v5 + BenchLM + SWE-Atlas 종합)
+    const modelsData = [
+      // 1. OpenAI Codex CLI 모델군 (5종)
+      {
+        id: "gpt-6.1-sol",
+        isCodex: true,
+        name: "Codex: GPT-6.1 Sol",
+        color: "#10b981", // 에메랄드 그린
+        steps: [
+          { level: "Low",  cost: 0.16, score: 48.0 },
+          { level: "Med",  cost: 0.65, score: 51.5 },
+          { level: "High", cost: 1.05, score: 53.5 },
+          { level: "Max",  cost: 1.50, score: 55.0 }
+        ]
+      },
+      {
+        id: "gpt-6-astra",
+        isCodex: true,
+        name: "Codex: GPT-6 Astra",
+        color: "#06b6d4", // 시안
+        steps: [
+          { level: "Low",  cost: 1.20, score: 47.0 },
+          { level: "Med",  cost: 2.50, score: 51.2 },
+          { level: "High", cost: 4.80, score: 54.5 },
+          { level: "Max",  cost: 7.04, score: 57.0 }
+        ]
+      },
+      {
+        id: "gpt-6.1-terra",
+        isCodex: true,
+        name: "Codex: GPT-6.1 Terra",
+        color: "#3b82f6", // 블루
+        steps: [
+          { level: "Low",  cost: 0.18, score: 40.0 },
+          { level: "Med",  cost: 0.40, score: 45.0 },
+          { level: "High", cost: 0.55, score: 48.2 },
+          { level: "Max",  cost: 0.69, score: 51.0 }
+        ]
+      },
+      {
+        id: "gpt-6-sol",
+        isCodex: true,
+        name: "Codex: GPT-6 Sol (구형)",
+        color: "#6ee7b7", // 라이트 민트
+        steps: [
+          { level: "Low",  cost: 0.40, score: 35.0 },
+          { level: "Med",  cost: 0.85, score: 39.5 },
+          { level: "High", cost: 1.40, score: 42.0 },
+          { level: "Max",  cost: 2.47, score: 44.0 }
+        ]
+      },
+      {
+        id: "gpt-6-luna",
+        isCodex: true,
+        name: "Codex: GPT-6 Luna",
+        color: "#818cf8", // 인디고
+        steps: [
+          { level: "Low",  cost: 0.04, score: 21.0 },
+          { level: "Med",  cost: 0.08, score: 24.5 },
+          { level: "High", cost: 0.12, score: 26.5 },
+          { level: "Max",  cost: 0.16, score: 28.0 }
+        ]
+      },
+
+      // 2. 외부 프론티어 비교 모델군
+      {
+        id: "claude-opus-5.5",
+        isCodex: false,
+        name: "Claude Code: Opus 5.5",
+        color: "#f43f5e", // 로즈
+        steps: [
+          { level: "Low",  cost: 2.80,  score: 53.0 },
+          { level: "Med",  cost: 5.98,  score: 58.2 },
+          { level: "High", cost: 8.70,  score: 60.5 },
+          { level: "Max",  cost: 11.42, score: 62.0 }
+        ]
+      },
+      {
+        id: "claude-sonnet-5.5",
+        isCodex: false,
+        name: "Claude Code: Sonnet 5.5",
+        color: "#fb923c", // 오렌지
+        steps: [
+          { level: "Low",  cost: 1.80,  score: 49.5 },
+          { level: "Med",  cost: 3.50,  score: 54.0 },
+          { level: "High", cost: 7.60,  score: 57.2 },
+          { level: "Max",  cost: 13.30, score: 59.3 }
+        ]
+      },
+      {
+        id: "gemini-4-carbon",
+        isCodex: false,
+        name: "Gemini CLI: 4 Carbon",
+        color: "#2dd4bf", // 틸
+        steps: [
+          { level: "Low",  cost: 0.90,  score: 48.0 },
+          { level: "Med",  cost: 1.99,  score: 52.5 },
+          { level: "High", cost: 4.29,  score: 56.5 },
+          { level: "Max",  cost: 6.59,  score: 60.1 }
+        ]
+      },
+      {
+        id: "deepseek-v4.1",
+        isCodex: false,
+        name: "Open Harness: DeepSeek V4.1",
+        color: "#c084fc", // 퍼플
+        steps: [
+          { level: "Low",  cost: 0.18,  score: 42.0 },
+          { level: "Med",  cost: 0.30,  score: 45.5 },
+          { level: "High", cost: 0.39,  score: 47.3 },
+          { level: "Max",  cost: 0.55,  score: 48.0 }
+        ]
+      }
+    ];
+
+    // Plotly traces 생성
+    const traces = modelsData.map(m => {
+      const x = m.steps.map(s => s.cost);
+      const y = m.steps.map(s => s.score);
+      const text = m.steps.map(s => `<b>${m.name}</b><br>추론 강도: <b>${s.level}</b><br>작업당 비용: $${s.cost.toFixed(2)}<br>성능 점수: ${s.score.toFixed(1)}`);
+      const sizes = [7, 10, 13, 17]; // Low -> Max 점 크기 증가
+
+      return {
+        name: m.name,
+        x: x,
+        y: y,
+        text: text,
+        hoverinfo: "text",
+        mode: "lines+markers",
+        type: "scatter",
+        visible: true,
+        line: { color: m.color, width: 2.3, shape: "spline" },
+        marker: { color: m.color, size: sizes, line: { color: "#ffffff", width: 1.2 } }
+      };
+    });
+
+    const layout = {
+      paper_bgcolor: "#131b2e",
+      plot_bgcolor: "#131b2e",
+      margin: { l: 60, r: 30, t: 20, b: 60 },
+      showlegend: false,
+      xaxis: {
+        title: { text: "Average Cost per Task (USD)", font: { color: "#cbd5e1", size: 12 } },
+        type: "log",
+        autorange: true,
+        gridcolor: "#222f49",
+        zerolinecolor: "#334155",
+        tickfont: { color: "#94a3b8" },
+        tickprefix: "$"
+      },
+      yaxis: {
+        title: { text: "Benchmarking Intelligence Index (0-100)", font: { color: "#cbd5e1", size: 12 } },
+        range: [18, 66],
+        gridcolor: "#222f49",
+        zerolinecolor: "#334155",
+        tickfont: { color: "#94a3b8" }
+      },
+      hoverlabel: {
+        bgcolor: "#090d16",
+        bordercolor: "#38bdf8",
+        font: { color: "#f8fafc", size: 12 }
+      }
+    };
+
+    const config = {
+      responsive: true,
+      displayModeBar: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: ['lasso2d', 'select2d']
+    };
+
+    Plotly.newPlot("chart", traces, layout, config);
+
+    // 사이드바 체크박스 리스트 생성
+    const checkboxListEl = document.getElementById("model-checkbox-list");
+
+    modelsData.forEach((m, idx) => {
+      const item = document.createElement("div");
+      item.className = `model-item ${m.isCodex ? 'codex-highlight' : ''}`;
+      item.innerHTML = `
+        <label class="model-label" for="chk-${idx}">
+          <span class="color-dot" style="background-color: ${m.color};"></span>
+          <span>${m.name}</span>
+        </label>
+        <input type="checkbox" id="chk-${idx}" class="custom-check model-chk" data-index="${idx}" checked>
+      `;
+      checkboxListEl.appendChild(item);
+    });
+
+    // 이벤트 리스너 바인딩
+    document.querySelectorAll(".model-chk").forEach(chk => {
+      chk.addEventListener("change", updateView);
+    });
+
+    function updateView() {
+      const chks = document.querySelectorAll(".model-chk");
+      const visibilities = [];
+      const selectedModels = [];
+
+      chks.forEach((c) => {
+        const isChecked = c.checked;
+        const idx = parseInt(c.dataset.index);
+        visibilities.push(isChecked);
+        if (isChecked) {
+          selectedModels.push(modelsData[idx]);
+        }
+      });
+
+      Plotly.restyle("chart", { visible: visibilities });
+      document.getElementById("selected-count").innerText = `${selectedModels.length}개 선택됨`;
+      renderSummaryTable(selectedModels);
+    }
+
+    function renderSummaryTable(selected) {
+      const tbody = document.getElementById("summary-table-body");
+      tbody.innerHTML = "";
+
+      if (selected.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#64748b; padding:20px;">선택된 모델이 없습니다.</td></tr>`;
+        return;
+      }
+
+      selected.forEach(m => {
+        const low = m.steps[0];
+        const max = m.steps[m.steps.length - 1];
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="color-dot" style="background-color: ${m.color};"></span> <b>${m.name.replace('Codex: ', '').replace('Claude Code: ', '').replace('Gemini CLI: ', '')}</b></td>
+          <td>$${low.cost.toFixed(2)} ~ $${max.cost.toFixed(2)}</td>
+          <td><span class="score-badge">${low.score.toFixed(1)}</span> ~ <span class="score-badge">${max.score.toFixed(1)}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 프리셋 필터링 로직
+    function applyPreset(type) {
+      const chks = document.querySelectorAll(".model-chk");
+
+      chks.forEach((c) => {
+        const idx = parseInt(c.dataset.index);
+        const m = modelsData[idx];
+
+        if (type === "all") {
+          c.checked = true;
+        } else if (type === "none") {
+          c.checked = false;
+        } else if (type === "codex_only") {
+          // Codex CLI 5종만 활성화
+          c.checked = m.isCodex;
+        } else if (type === "sol_vs_sol") {
+          // 6.1 Sol과 구형 6 Sol만 1:1 대조
+          c.checked = (m.id === "gpt-6.1-sol" || m.id === "gpt-6-sol");
+        } else if (type === "flagship") {
+          // 최고 점수 플래그십 (Astra, Opus 5.5, Carbon)
+          c.checked = ["gpt-6-astra", "claude-opus-5.5", "gemini-4-carbon"].includes(m.id);
+        }
+      });
+
+      updateView();
+    }
+
+    // 스케일 전환 (Log / Linear)
+    function setXScale(scaleType) {
+      document.getElementById("btn-log").classList.toggle("active", scaleType === "log");
+      document.getElementById("btn-linear").classList.toggle("active", scaleType === "linear");
+      Plotly.relayout("chart", { "xaxis.type": scaleType });
+    }
+
+    // 최초 뷰 로드
+    updateView();
+  </script>
+</body>
+</html>

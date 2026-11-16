@@ -1,0 +1,1399 @@
+{
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-11-16T04:30:22.311762+00:00",
+  "sourceStatus": {
+    "deepswe": {
+      "status": "cached",
+      "count": 9,
+      "message": "offline mode: using snapshot cache"
+    },
+    "artificial_analysis": {
+      "status": "cached",
+      "count": 11,
+      "message": "offline mode: using snapshot cache"
+    },
+    "swebench": {
+      "status": "cached",
+      "count": 7,
+      "message": "offline mode: using snapshot cache"
+    },
+    "livebench": {
+      "status": "cached",
+      "count": 6,
+      "message": "offline mode: using snapshot cache"
+    },
+    "aider": {
+      "status": "cached",
+      "count": 6,
+      "message": "offline mode: using snapshot cache"
+    },
+    "terminal_bench": {
+      "status": "cached",
+      "count": 5,
+      "message": "offline mode: using snapshot cache"
+    },
+    "lmsys": {
+      "status": "cached",
+      "count": 5,
+      "message": "offline mode: using snapshot cache"
+    }
+  },
+  "taskProfiles": {
+    "composite": {
+      "label": "Composite Intelligence",
+      "description": "Balanced overall capability across SWE, coding, planning, and CLI",
+      "weights": {
+        "agentic_swe": 0.3,
+        "code_generation": 0.3,
+        "reasoning_planning": 0.25,
+        "cli_execution": 0.15
+      }
+    },
+    "plan": {
+      "label": "Plan (Architecture & Reasoning)",
+      "description": "Prioritizes abstract reasoning, architecture trade-offs, and multi-file planning",
+      "weights": {
+        "reasoning_planning": 0.5,
+        "agentic_swe": 0.35,
+        "code_generation": 0.15,
+        "cli_execution": 0.0
+      }
+    },
+    "implement": {
+      "label": "Implement (Coding & Editing)",
+      "description": "Prioritizes accurate code synthesis, diff editing, and repo-level implementation",
+      "weights": {
+        "code_generation": 0.45,
+        "agentic_swe": 0.4,
+        "cli_execution": 0.15,
+        "reasoning_planning": 0.0
+      }
+    },
+    "debug": {
+      "label": "Debug (Root Cause & CLI)",
+      "description": "Prioritizes repository debugging, environment diagnosis, and shell execution",
+      "weights": {
+        "agentic_swe": 0.5,
+        "cli_execution": 0.25,
+        "reasoning_planning": 0.25,
+        "code_generation": 0.0
+      }
+    },
+    "trivial": {
+      "label": "Trivial (Docs, Formatting, Boilerplate)",
+      "description": "Prioritizes basic code generation at minimal cost",
+      "weights": {
+        "code_generation": 0.6,
+        "cli_execution": 0.2,
+        "reasoning_planning": 0.2,
+        "agentic_swe": 0.0
+      }
+    }
+  },
+  "rankings": {
+    "composite": [
+      {
+        "rank": 1,
+        "id": "claude-opus-5.5",
+        "name": "Claude Code: Opus 5.5",
+        "score": 61.59,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 2,
+        "id": "claude-sonnet-5.5",
+        "name": "Claude Code: Sonnet 5.5",
+        "score": 59.59,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 3,
+        "id": "gemini-4-carbon",
+        "name": "Gemini CLI: 4 Carbon",
+        "score": 57.41,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 4,
+        "id": "gpt-6-astra",
+        "name": "Codex: GPT-6 Astra",
+        "score": 55.77,
+        "coverageRatio": 0.714
+      },
+      {
+        "rank": 5,
+        "id": "gemini-4-hydrogen",
+        "name": "Gemini 4 Hydrogen",
+        "score": 48.57,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 6,
+        "id": "gpt-6.1-sol",
+        "name": "Codex: GPT-6.1 Sol",
+        "score": 48.29,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 7,
+        "id": "qwen-3.5-coder",
+        "name": "Qwen 3.5 Coder",
+        "score": 44.13,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 8,
+        "id": "gpt-6.1-terra",
+        "name": "Codex: GPT-6.1 Terra",
+        "score": 40.37,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 9,
+        "id": "deepseek-v4.1",
+        "name": "Open Harness: DeepSeek V4.1",
+        "score": 39.45,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 10,
+        "id": "gpt-6-sol",
+        "name": "Codex: GPT-6 Sol (구형)",
+        "score": 39.09,
+        "coverageRatio": 0.143
+      },
+      {
+        "rank": 11,
+        "id": "gpt-6-luna",
+        "name": "Codex: GPT-6 Luna",
+        "score": 32.59,
+        "coverageRatio": 0.143
+      }
+    ],
+    "plan": [
+      {
+        "rank": 1,
+        "id": "claude-opus-5.5",
+        "name": "Claude Code: Opus 5.5",
+        "score": 61.11,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 2,
+        "id": "claude-sonnet-5.5",
+        "name": "Claude Code: Sonnet 5.5",
+        "score": 58.55,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 3,
+        "id": "gemini-4-carbon",
+        "name": "Gemini CLI: 4 Carbon",
+        "score": 58.1,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 4,
+        "id": "gpt-6-astra",
+        "name": "Codex: GPT-6 Astra",
+        "score": 56.32,
+        "coverageRatio": 0.714
+      },
+      {
+        "rank": 5,
+        "id": "gemini-4-hydrogen",
+        "name": "Gemini 4 Hydrogen",
+        "score": 48.26,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 6,
+        "id": "gpt-6.1-sol",
+        "name": "Codex: GPT-6.1 Sol",
+        "score": 46.28,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 7,
+        "id": "qwen-3.5-coder",
+        "name": "Qwen 3.5 Coder",
+        "score": 45.07,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 8,
+        "id": "gpt-6.1-terra",
+        "name": "Codex: GPT-6.1 Terra",
+        "score": 41.87,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 9,
+        "id": "deepseek-v4.1",
+        "name": "Open Harness: DeepSeek V4.1",
+        "score": 39.78,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 10,
+        "id": "gpt-6-sol",
+        "name": "Codex: GPT-6 Sol (구형)",
+        "score": 39.29,
+        "coverageRatio": 0.143
+      },
+      {
+        "rank": 11,
+        "id": "gpt-6-luna",
+        "name": "Codex: GPT-6 Luna",
+        "score": 32.76,
+        "coverageRatio": 0.143
+      }
+    ],
+    "implement": [
+      {
+        "rank": 1,
+        "id": "claude-opus-5.5",
+        "name": "Claude Code: Opus 5.5",
+        "score": 62.26,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 2,
+        "id": "claude-sonnet-5.5",
+        "name": "Claude Code: Sonnet 5.5",
+        "score": 60.49,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 3,
+        "id": "gemini-4-carbon",
+        "name": "Gemini CLI: 4 Carbon",
+        "score": 56.79,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 4,
+        "id": "gpt-6-astra",
+        "name": "Codex: GPT-6 Astra",
+        "score": 55.11,
+        "coverageRatio": 0.714
+      },
+      {
+        "rank": 5,
+        "id": "gpt-6.1-sol",
+        "name": "Codex: GPT-6.1 Sol",
+        "score": 49.12,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 6,
+        "id": "gemini-4-hydrogen",
+        "name": "Gemini 4 Hydrogen",
+        "score": 48.88,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 7,
+        "id": "qwen-3.5-coder",
+        "name": "Qwen 3.5 Coder",
+        "score": 43.08,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 8,
+        "id": "deepseek-v4.1",
+        "name": "Open Harness: DeepSeek V4.1",
+        "score": 39.16,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 9,
+        "id": "gpt-6-sol",
+        "name": "Codex: GPT-6 Sol (구형)",
+        "score": 38.9,
+        "coverageRatio": 0.143
+      },
+      {
+        "rank": 10,
+        "id": "gpt-6.1-terra",
+        "name": "Codex: GPT-6.1 Terra",
+        "score": 38.56,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 11,
+        "id": "gpt-6-luna",
+        "name": "Codex: GPT-6 Luna",
+        "score": 32.42,
+        "coverageRatio": 0.143
+      }
+    ],
+    "debug": [
+      {
+        "rank": 1,
+        "id": "claude-opus-5.5",
+        "name": "Claude Code: Opus 5.5",
+        "score": 62.38,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 2,
+        "id": "claude-sonnet-5.5",
+        "name": "Claude Code: Sonnet 5.5",
+        "score": 59.7,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 3,
+        "id": "gemini-4-carbon",
+        "name": "Gemini CLI: 4 Carbon",
+        "score": 56.19,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 4,
+        "id": "gpt-6-astra",
+        "name": "Codex: GPT-6 Astra",
+        "score": 54.39,
+        "coverageRatio": 0.714
+      },
+      {
+        "rank": 5,
+        "id": "gpt-6.1-sol",
+        "name": "Codex: GPT-6.1 Sol",
+        "score": 49.02,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 6,
+        "id": "gemini-4-hydrogen",
+        "name": "Gemini 4 Hydrogen",
+        "score": 48.67,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 7,
+        "id": "qwen-3.5-coder",
+        "name": "Qwen 3.5 Coder",
+        "score": 42.65,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 8,
+        "id": "gpt-6.1-terra",
+        "name": "Codex: GPT-6.1 Terra",
+        "score": 39.57,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 9,
+        "id": "deepseek-v4.1",
+        "name": "Open Harness: DeepSeek V4.1",
+        "score": 38.63,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 10,
+        "id": "gpt-6-sol",
+        "name": "Codex: GPT-6 Sol (구형)",
+        "score": 38.5,
+        "coverageRatio": 0.143
+      },
+      {
+        "rank": 11,
+        "id": "gpt-6-luna",
+        "name": "Codex: GPT-6 Luna",
+        "score": 32.09,
+        "coverageRatio": 0.143
+      }
+    ],
+    "trivial": [
+      {
+        "rank": 1,
+        "id": "claude-opus-5.5",
+        "name": "Claude Code: Opus 5.5",
+        "score": 60.85,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 2,
+        "id": "claude-sonnet-5.5",
+        "name": "Claude Code: Sonnet 5.5",
+        "score": 59.79,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 3,
+        "id": "gemini-4-carbon",
+        "name": "Gemini CLI: 4 Carbon",
+        "score": 58.31,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 4,
+        "id": "gpt-6-astra",
+        "name": "Codex: GPT-6 Astra",
+        "score": 56.99,
+        "coverageRatio": 0.714
+      },
+      {
+        "rank": 5,
+        "id": "gpt-6.1-sol",
+        "name": "Codex: GPT-6.1 Sol",
+        "score": 48.91,
+        "coverageRatio": 1.0
+      },
+      {
+        "rank": 6,
+        "id": "gemini-4-hydrogen",
+        "name": "Gemini 4 Hydrogen",
+        "score": 48.54,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 7,
+        "id": "qwen-3.5-coder",
+        "name": "Qwen 3.5 Coder",
+        "score": 45.37,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 8,
+        "id": "gpt-6.1-terra",
+        "name": "Codex: GPT-6.1 Terra",
+        "score": 41.01,
+        "coverageRatio": 0.571
+      },
+      {
+        "rank": 9,
+        "id": "deepseek-v4.1",
+        "name": "Open Harness: DeepSeek V4.1",
+        "score": 40.09,
+        "coverageRatio": 0.857
+      },
+      {
+        "rank": 10,
+        "id": "gpt-6-sol",
+        "name": "Codex: GPT-6 Sol (구형)",
+        "score": 39.59,
+        "coverageRatio": 0.143
+      },
+      {
+        "rank": 11,
+        "id": "gpt-6-luna",
+        "name": "Codex: GPT-6 Luna",
+        "score": 33.01,
+        "coverageRatio": 0.143
+      }
+    ]
+  },
+  "models": [
+    {
+      "id": "gpt-6.1-sol",
+      "name": "Codex: GPT-6.1 Sol",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#10b981",
+      "sources": [
+        "aider",
+        "artificial_analysis",
+        "deepswe",
+        "livebench",
+        "lmsys",
+        "swebench",
+        "terminal_bench"
+      ],
+      "coverageRatio": 1.0,
+      "dimensionScores": {
+        "agentic_swe": 47.85,
+        "code_generation": 48.05,
+        "reasoning_planning": 44.65,
+        "cli_execution": 55.73
+      },
+      "profileScores": {
+        "composite": 48.29,
+        "plan": 46.28,
+        "implement": 49.12,
+        "debug": 49.02,
+        "trivial": 48.91
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.16,
+          "score": 48.0,
+          "profileScores": {
+            "composite": 45.01,
+            "plan": 43.14,
+            "implement": 45.79,
+            "debug": 45.69,
+            "trivial": 45.58
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Med",
+          "cost": 0.65,
+          "score": 51.5,
+          "profileScores": {
+            "composite": 48.29,
+            "plan": 46.28,
+            "implement": 49.12,
+            "debug": 49.02,
+            "trivial": 48.91
+          },
+          "isPareto": true
+        },
+        {
+          "level": "High",
+          "cost": 1.05,
+          "score": 53.5,
+          "profileScores": {
+            "composite": 50.17,
+            "plan": 48.08,
+            "implement": 51.03,
+            "debug": 50.93,
+            "trivial": 50.81
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 1.5,
+          "score": 55.0,
+          "profileScores": {
+            "composite": 51.58,
+            "plan": 49.43,
+            "implement": 52.46,
+            "debug": 52.35,
+            "trivial": 52.23
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "gpt-6-astra",
+      "name": "Codex: GPT-6 Astra",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#06b6d4",
+      "sources": [
+        "artificial_analysis",
+        "deepswe",
+        "livebench",
+        "lmsys",
+        "swebench"
+      ],
+      "coverageRatio": 0.714,
+      "dimensionScores": {
+        "agentic_swe": 52.8,
+        "code_generation": 57.67,
+        "reasoning_planning": 58.37,
+        "cli_execution": 53.58
+      },
+      "profileScores": {
+        "composite": 55.77,
+        "plan": 56.32,
+        "implement": 55.11,
+        "debug": 54.39,
+        "trivial": 56.99
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 1.2,
+          "score": 47.0,
+          "profileScores": {
+            "composite": 51.2,
+            "plan": 51.7,
+            "implement": 50.59,
+            "debug": 49.93,
+            "trivial": 52.32
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Med",
+          "cost": 2.5,
+          "score": 51.2,
+          "profileScores": {
+            "composite": 55.77,
+            "plan": 56.32,
+            "implement": 55.11,
+            "debug": 54.39,
+            "trivial": 56.99
+          },
+          "isPareto": false
+        },
+        {
+          "level": "High",
+          "cost": 4.8,
+          "score": 54.5,
+          "profileScores": {
+            "composite": 59.37,
+            "plan": 59.95,
+            "implement": 58.66,
+            "debug": 57.89,
+            "trivial": 60.67
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 7.04,
+          "score": 57.0,
+          "profileScores": {
+            "composite": 62.09,
+            "plan": 62.7,
+            "implement": 61.35,
+            "debug": 60.55,
+            "trivial": 63.45
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "gpt-6.1-terra",
+      "name": "Codex: GPT-6.1 Terra",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#3b82f6",
+      "sources": [
+        "aider",
+        "artificial_analysis",
+        "deepswe",
+        "terminal_bench"
+      ],
+      "coverageRatio": 0.571,
+      "dimensionScores": {
+        "agentic_swe": 36.75,
+        "code_generation": 40.1,
+        "reasoning_planning": 45.98,
+        "cli_execution": 38.79
+      },
+      "profileScores": {
+        "composite": 40.37,
+        "plan": 41.87,
+        "implement": 38.56,
+        "debug": 39.57,
+        "trivial": 41.01
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.18,
+          "score": 40.0,
+          "profileScores": {
+            "composite": 35.88,
+            "plan": 37.22,
+            "implement": 34.28,
+            "debug": 35.17,
+            "trivial": 36.46
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Med",
+          "cost": 0.4,
+          "score": 45.0,
+          "profileScores": {
+            "composite": 40.37,
+            "plan": 41.87,
+            "implement": 38.56,
+            "debug": 39.57,
+            "trivial": 41.01
+          },
+          "isPareto": false
+        },
+        {
+          "level": "High",
+          "cost": 0.55,
+          "score": 48.2,
+          "profileScores": {
+            "composite": 43.24,
+            "plan": 44.85,
+            "implement": 41.3,
+            "debug": 42.38,
+            "trivial": 43.93
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 0.69,
+          "score": 51.0,
+          "profileScores": {
+            "composite": 45.75,
+            "plan": 47.45,
+            "implement": 43.7,
+            "debug": 44.84,
+            "trivial": 46.48
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "gpt-6-sol",
+      "name": "Codex: GPT-6 Sol (구형)",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#6ee7b7",
+      "sources": [
+        "artificial_analysis"
+      ],
+      "coverageRatio": 0.143,
+      "dimensionScores": {
+        "agentic_swe": 38.0,
+        "code_generation": 39.99,
+        "reasoning_planning": 39.99,
+        "cli_execution": 38.0
+      },
+      "profileScores": {
+        "composite": 39.09,
+        "plan": 39.29,
+        "implement": 38.9,
+        "debug": 38.5,
+        "trivial": 39.59
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.4,
+          "score": 35.0,
+          "profileScores": {
+            "composite": 34.64,
+            "plan": 34.82,
+            "implement": 34.46,
+            "debug": 34.11,
+            "trivial": 35.08
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Med",
+          "cost": 0.85,
+          "score": 39.5,
+          "profileScores": {
+            "composite": 39.09,
+            "plan": 39.29,
+            "implement": 38.9,
+            "debug": 38.5,
+            "trivial": 39.59
+          },
+          "isPareto": false
+        },
+        {
+          "level": "High",
+          "cost": 1.4,
+          "score": 42.0,
+          "profileScores": {
+            "composite": 41.57,
+            "plan": 41.78,
+            "implement": 41.36,
+            "debug": 40.93,
+            "trivial": 42.1
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 2.47,
+          "score": 44.0,
+          "profileScores": {
+            "composite": 43.55,
+            "plan": 43.77,
+            "implement": 43.33,
+            "debug": 42.88,
+            "trivial": 44.11
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "gpt-6-luna",
+      "name": "Codex: GPT-6 Luna",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#818cf8",
+      "sources": [
+        "artificial_analysis"
+      ],
+      "coverageRatio": 0.143,
+      "dimensionScores": {
+        "agentic_swe": 31.67,
+        "code_generation": 33.34,
+        "reasoning_planning": 33.34,
+        "cli_execution": 31.67
+      },
+      "profileScores": {
+        "composite": 32.59,
+        "plan": 32.76,
+        "implement": 32.42,
+        "debug": 32.09,
+        "trivial": 33.01
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.04,
+          "score": 21.0,
+          "profileScores": {
+            "composite": 27.94,
+            "plan": 28.08,
+            "implement": 27.79,
+            "debug": 27.51,
+            "trivial": 28.29
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Med",
+          "cost": 0.08,
+          "score": 24.5,
+          "profileScores": {
+            "composite": 32.59,
+            "plan": 32.76,
+            "implement": 32.42,
+            "debug": 32.09,
+            "trivial": 33.01
+          },
+          "isPareto": true
+        },
+        {
+          "level": "High",
+          "cost": 0.12,
+          "score": 26.5,
+          "profileScores": {
+            "composite": 35.25,
+            "plan": 35.43,
+            "implement": 35.07,
+            "debug": 34.71,
+            "trivial": 35.7
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 0.16,
+          "score": 28.0,
+          "profileScores": {
+            "composite": 37.25,
+            "plan": 37.44,
+            "implement": 37.06,
+            "debug": 36.68,
+            "trivial": 37.72
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-5.5",
+      "name": "Claude Code: Opus 5.5",
+      "provider": "anthropic",
+      "harness": "claude-code",
+      "isCodex": false,
+      "color": "#f43f5e",
+      "sources": [
+        "aider",
+        "artificial_analysis",
+        "deepswe",
+        "livebench",
+        "lmsys",
+        "swebench",
+        "terminal_bench"
+      ],
+      "coverageRatio": 1.0,
+      "dimensionScores": {
+        "agentic_swe": 63.8,
+        "code_generation": 60.78,
+        "reasoning_planning": 59.32,
+        "cli_execution": 62.61
+      },
+      "profileScores": {
+        "composite": 61.59,
+        "plan": 61.11,
+        "implement": 62.26,
+        "debug": 62.38,
+        "trivial": 60.85
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 2.8,
+          "score": 53.0,
+          "profileScores": {
+            "composite": 56.09,
+            "plan": 55.65,
+            "implement": 56.7,
+            "debug": 56.81,
+            "trivial": 55.41
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Med",
+          "cost": 5.98,
+          "score": 58.2,
+          "profileScores": {
+            "composite": 61.59,
+            "plan": 61.11,
+            "implement": 62.26,
+            "debug": 62.38,
+            "trivial": 60.85
+          },
+          "isPareto": false
+        },
+        {
+          "level": "High",
+          "cost": 8.7,
+          "score": 60.5,
+          "profileScores": {
+            "composite": 64.03,
+            "plan": 63.52,
+            "implement": 64.72,
+            "debug": 64.85,
+            "trivial": 63.26
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 11.42,
+          "score": 62.0,
+          "profileScores": {
+            "composite": 65.62,
+            "plan": 65.1,
+            "implement": 66.33,
+            "debug": 66.46,
+            "trivial": 64.82
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "claude-sonnet-5.5",
+      "name": "Claude Code: Sonnet 5.5",
+      "provider": "anthropic",
+      "harness": "claude-code",
+      "isCodex": false,
+      "color": "#fb923c",
+      "sources": [
+        "aider",
+        "artificial_analysis",
+        "deepswe",
+        "swebench"
+      ],
+      "coverageRatio": 0.571,
+      "dimensionScores": {
+        "agentic_swe": 60.39,
+        "code_generation": 60.31,
+        "reasoning_planning": 56.72,
+        "cli_execution": 61.3
+      },
+      "profileScores": {
+        "composite": 59.59,
+        "plan": 58.55,
+        "implement": 60.49,
+        "debug": 59.7,
+        "trivial": 59.79
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 1.8,
+          "score": 49.5,
+          "profileScores": {
+            "composite": 54.62,
+            "plan": 53.67,
+            "implement": 55.45,
+            "debug": 54.73,
+            "trivial": 54.81
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Med",
+          "cost": 3.5,
+          "score": 54.0,
+          "profileScores": {
+            "composite": 59.59,
+            "plan": 58.55,
+            "implement": 60.49,
+            "debug": 59.7,
+            "trivial": 59.79
+          },
+          "isPareto": true
+        },
+        {
+          "level": "High",
+          "cost": 7.6,
+          "score": 57.2,
+          "profileScores": {
+            "composite": 63.12,
+            "plan": 62.02,
+            "implement": 64.08,
+            "debug": 63.24,
+            "trivial": 63.34
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 13.3,
+          "score": 59.3,
+          "profileScores": {
+            "composite": 65.44,
+            "plan": 64.29,
+            "implement": 66.43,
+            "debug": 65.56,
+            "trivial": 65.66
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "gemini-4-carbon",
+      "name": "Gemini CLI: 4 Carbon",
+      "provider": "google",
+      "harness": "gemini-cli",
+      "isCodex": false,
+      "color": "#2dd4bf",
+      "sources": [
+        "artificial_analysis",
+        "deepswe",
+        "livebench",
+        "lmsys",
+        "swebench",
+        "terminal_bench"
+      ],
+      "coverageRatio": 0.857,
+      "dimensionScores": {
+        "agentic_swe": 55.12,
+        "code_generation": 59.01,
+        "reasoning_planning": 59.92,
+        "cli_execution": 54.59
+      },
+      "profileScores": {
+        "composite": 57.41,
+        "plan": 58.1,
+        "implement": 56.79,
+        "debug": 56.19,
+        "trivial": 58.31
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.9,
+          "score": 48.0,
+          "profileScores": {
+            "composite": 52.49,
+            "plan": 53.12,
+            "implement": 51.93,
+            "debug": 51.37,
+            "trivial": 53.31
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Med",
+          "cost": 1.99,
+          "score": 52.5,
+          "profileScores": {
+            "composite": 57.41,
+            "plan": 58.1,
+            "implement": 56.79,
+            "debug": 56.19,
+            "trivial": 58.31
+          },
+          "isPareto": true
+        },
+        {
+          "level": "High",
+          "cost": 4.29,
+          "score": 56.5,
+          "profileScores": {
+            "composite": 61.78,
+            "plan": 62.53,
+            "implement": 61.12,
+            "debug": 60.47,
+            "trivial": 62.75
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Max",
+          "cost": 6.59,
+          "score": 60.1,
+          "profileScores": {
+            "composite": 65.72,
+            "plan": 66.51,
+            "implement": 65.02,
+            "debug": 64.32,
+            "trivial": 66.75
+          },
+          "isPareto": true
+        }
+      ]
+    },
+    {
+      "id": "deepseek-v4.1",
+      "name": "Open Harness: DeepSeek V4.1",
+      "provider": "deepseek",
+      "harness": "open-harness",
+      "isCodex": false,
+      "color": "#c084fc",
+      "sources": [
+        "aider",
+        "artificial_analysis",
+        "deepswe",
+        "livebench",
+        "swebench",
+        "terminal_bench"
+      ],
+      "coverageRatio": 0.857,
+      "dimensionScores": {
+        "agentic_swe": 38.0,
+        "code_generation": 40.65,
+        "reasoning_planning": 40.76,
+        "cli_execution": 37.75
+      },
+      "profileScores": {
+        "composite": 39.45,
+        "plan": 39.78,
+        "implement": 39.16,
+        "debug": 38.63,
+        "trivial": 40.09
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.18,
+          "score": 42.0,
+          "profileScores": {
+            "composite": 36.41,
+            "plan": 36.72,
+            "implement": 36.14,
+            "debug": 35.65,
+            "trivial": 37.01
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Med",
+          "cost": 0.3,
+          "score": 45.5,
+          "profileScores": {
+            "composite": 39.45,
+            "plan": 39.78,
+            "implement": 39.16,
+            "debug": 38.63,
+            "trivial": 40.09
+          },
+          "isPareto": false
+        },
+        {
+          "level": "High",
+          "cost": 0.39,
+          "score": 47.3,
+          "profileScores": {
+            "composite": 41.01,
+            "plan": 41.35,
+            "implement": 40.7,
+            "debug": 40.15,
+            "trivial": 41.68
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 0.55,
+          "score": 48.0,
+          "profileScores": {
+            "composite": 41.62,
+            "plan": 41.96,
+            "implement": 41.31,
+            "debug": 40.75,
+            "trivial": 42.3
+          },
+          "isPareto": false
+        }
+      ]
+    },
+    {
+      "id": "qwen-3.5-coder",
+      "name": "Qwen 3.5 Coder",
+      "provider": "alibaba",
+      "harness": "open-harness",
+      "isCodex": false,
+      "color": "#84cc16",
+      "sources": [
+        "aider",
+        "artificial_analysis",
+        "deepswe",
+        "swebench"
+      ],
+      "coverageRatio": 0.571,
+      "dimensionScores": {
+        "agentic_swe": 40.61,
+        "code_generation": 45.81,
+        "reasoning_planning": 47.96,
+        "cli_execution": 41.44
+      },
+      "profileScores": {
+        "composite": 44.13,
+        "plan": 45.07,
+        "implement": 43.08,
+        "debug": 42.65,
+        "trivial": 45.37
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.098,
+          "score": 39.63,
+          "profileScores": {
+            "composite": 39.63,
+            "plan": 40.47,
+            "implement": 38.68,
+            "debug": 38.31,
+            "trivial": 40.74
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Med",
+          "cost": 0.28,
+          "score": 44.13,
+          "profileScores": {
+            "composite": 44.13,
+            "plan": 45.07,
+            "implement": 43.08,
+            "debug": 42.65,
+            "trivial": 45.37
+          },
+          "isPareto": false
+        },
+        {
+          "level": "High",
+          "cost": 0.532,
+          "score": 47.13,
+          "profileScores": {
+            "composite": 47.13,
+            "plan": 48.13,
+            "implement": 46.0,
+            "debug": 45.55,
+            "trivial": 48.45
+          },
+          "isPareto": true
+        },
+        {
+          "level": "Max",
+          "cost": 0.868,
+          "score": 49.13,
+          "profileScores": {
+            "composite": 49.13,
+            "plan": 50.17,
+            "implement": 47.96,
+            "debug": 47.49,
+            "trivial": 50.51
+          },
+          "isPareto": true
+        }
+      ]
+    },
+    {
+      "id": "gemini-4-hydrogen",
+      "name": "Gemini 4 Hydrogen",
+      "provider": "google",
+      "harness": "gemini-cli",
+      "isCodex": false,
+      "color": "#14b8a6",
+      "sources": [
+        "artificial_analysis",
+        "deepswe",
+        "livebench",
+        "lmsys"
+      ],
+      "coverageRatio": 0.571,
+      "dimensionScores": {
+        "agentic_swe": 49.03,
+        "code_generation": 48.7,
+        "reasoning_planning": 47.59,
+        "cli_execution": 49.03
+      },
+      "profileScores": {
+        "composite": 48.57,
+        "plan": 48.26,
+        "implement": 48.88,
+        "debug": 48.67,
+        "trivial": 48.54
+      },
+      "steps": [
+        {
+          "level": "Low",
+          "cost": 0.297,
+          "score": 44.07,
+          "profileScores": {
+            "composite": 44.07,
+            "plan": 43.79,
+            "implement": 44.35,
+            "debug": 44.16,
+            "trivial": 44.05
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Med",
+          "cost": 0.85,
+          "score": 48.57,
+          "profileScores": {
+            "composite": 48.57,
+            "plan": 48.26,
+            "implement": 48.88,
+            "debug": 48.67,
+            "trivial": 48.54
+          },
+          "isPareto": true
+        },
+        {
+          "level": "High",
+          "cost": 1.615,
+          "score": 51.57,
+          "profileScores": {
+            "composite": 51.57,
+            "plan": 51.24,
+            "implement": 51.9,
+            "debug": 51.67,
+            "trivial": 51.54
+          },
+          "isPareto": false
+        },
+        {
+          "level": "Max",
+          "cost": 2.635,
+          "score": 53.57,
+          "profileScores": {
+            "composite": 53.57,
+            "plan": 53.23,
+            "implement": 53.91,
+            "debug": 53.68,
+            "trivial": 53.54
+          },
+          "isPareto": false
+        }
+      ]
+    }
+  ]
+}

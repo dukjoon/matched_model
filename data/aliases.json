@@ -1,0 +1,13 @@
+{
+  "gpt-6.1-sol": ["gpt 6.1 sol", "codex: gpt-6.1 sol", "openai/gpt-6.1-sol", "6.1 sol"],
+  "gpt-6-astra": ["gpt 6 astra", "codex: gpt-6 astra", "openai/gpt-6-astra", "6 astra"],
+  "gpt-6.1-terra": ["gpt 6.1 terra", "codex: gpt-6.1 terra", "openai/gpt-6.1-terra", "6.1 terra"],
+  "gpt-6-sol": ["gpt 6 sol", "codex: gpt-6 sol (구형)", "codex: gpt-6 sol", "openai/gpt-6-sol"],
+  "gpt-6-luna": ["gpt 6 luna", "codex: gpt-6 luna", "openai/gpt-6-luna"],
+  "claude-opus-5.5": ["claude opus 5.5", "claude code: opus 5.5", "anthropic/claude-opus-5.5", "opus 5.5"],
+  "claude-sonnet-5.5": ["claude sonnet 5.5", "claude code: sonnet 5.5", "anthropic/claude-sonnet-5.5", "sonnet 5.5"],
+  "gemini-4-carbon": ["gemini 4 carbon", "gemini cli: 4 carbon", "google/gemini-4-carbon", "4 carbon"],
+  "deepseek-v4.1": ["deepseek v4.1", "open harness: deepseek v4.1", "deepseek/deepseek-v4.1"],
+  "qwen-3.5-coder": ["qwen 3.5 coder", "qwen/qwen-3.5-coder", "qwen3.5-coder-480b"],
+  "gemini-4-hydrogen": ["gemini 4 hydrogen", "google/gemini-4-hydrogen", "gemini-4-hydrogen-medium"]
+}

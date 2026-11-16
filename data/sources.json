@@ -1,0 +1,140 @@
+{
+  "consensus_min_sources": 2,
+  "dimensions": [
+    "agentic_swe",
+    "code_generation",
+    "reasoning_planning",
+    "cli_execution"
+  ],
+  "sources": {
+    "deepswe": {
+      "name": "DeepSWE",
+      "url": "https://deepswe.datacurve.ai/",
+      "description": "Multi-file agentic software engineering pass rate and average cost per task",
+      "dimension_weights": {
+        "agentic_swe": 0.75,
+        "cli_execution": 0.25
+      },
+      "reliability": 1.0,
+      "scale_hint": "percent_0_100"
+    },
+    "artificial_analysis": {
+      "name": "Artificial Analysis",
+      "url": "https://artificialanalysis.ai/models",
+      "description": "Intelligence Index, coding sub-score, throughput (TPS), and API pricing",
+      "dimension_weights": {
+        "reasoning_planning": 0.6,
+        "code_generation": 0.4
+      },
+      "reliability": 1.0,
+      "scale_hint": "index_0_100"
+    },
+    "swebench": {
+      "name": "SWE-bench Verified",
+      "url": "https://www.swebench.com/",
+      "description": "Real-world GitHub repository issue resolution benchmark",
+      "dimension_weights": {
+        "agentic_swe": 0.85,
+        "code_generation": 0.15
+      },
+      "reliability": 1.0,
+      "scale_hint": "percent_0_100"
+    },
+    "livebench": {
+      "name": "LiveBench",
+      "url": "https://livebench.ai/",
+      "description": "Contamination-free coding, math, reasoning, and instruction following",
+      "dimension_weights": {
+        "reasoning_planning": 0.65,
+        "code_generation": 0.35
+      },
+      "reliability": 0.95,
+      "scale_hint": "score_0_100"
+    },
+    "aider": {
+      "name": "Aider Polyglot",
+      "url": "https://aider.chat/docs/leaderboards/",
+      "description": "Multi-language code editing, refactoring, and diff application accuracy",
+      "dimension_weights": {
+        "code_generation": 0.8,
+        "agentic_swe": 0.2
+      },
+      "reliability": 0.95,
+      "scale_hint": "percent_0_100"
+    },
+    "terminal_bench": {
+      "name": "Terminal-Bench",
+      "url": "https://www.tbench.ai/",
+      "description": "CLI, shell scripting, environment debugging, and DevOps execution",
+      "dimension_weights": {
+        "cli_execution": 0.85,
+        "agentic_swe": 0.15
+      },
+      "reliability": 0.9,
+      "scale_hint": "percent_0_100"
+    },
+    "lmsys": {
+      "name": "LMSYS Chatbot Arena",
+      "url": "https://lmarena.ai/",
+      "description": "Crowdsourced blind human preference Elo rating (Coding & Hard Prompts)",
+      "dimension_weights": {
+        "reasoning_planning": 0.7,
+        "code_generation": 0.3
+      },
+      "reliability": 0.85,
+      "scale_hint": "elo_1000_1500"
+    }
+  },
+  "task_profiles": {
+    "composite": {
+      "label": "Composite Intelligence",
+      "description": "Balanced overall capability across SWE, coding, planning, and CLI",
+      "weights": {
+        "agentic_swe": 0.30,
+        "code_generation": 0.30,
+        "reasoning_planning": 0.25,
+        "cli_execution": 0.15
+      }
+    },
+    "plan": {
+      "label": "Plan (Architecture & Reasoning)",
+      "description": "Prioritizes abstract reasoning, architecture trade-offs, and multi-file planning",
+      "weights": {
+        "reasoning_planning": 0.50,
+        "agentic_swe": 0.35,
+        "code_generation": 0.15,
+        "cli_execution": 0.00
+      }
+    },
+    "implement": {
+      "label": "Implement (Coding & Editing)",
+      "description": "Prioritizes accurate code synthesis, diff editing, and repo-level implementation",
+      "weights": {
+        "code_generation": 0.45,
+        "agentic_swe": 0.40,
+        "cli_execution": 0.15,
+        "reasoning_planning": 0.00
+      }
+    },
+    "debug": {
+      "label": "Debug (Root Cause & CLI)",
+      "description": "Prioritizes repository debugging, environment diagnosis, and shell execution",
+      "weights": {
+        "agentic_swe": 0.50,
+        "cli_execution": 0.25,
+        "reasoning_planning": 0.25,
+        "code_generation": 0.00
+      }
+    },
+    "trivial": {
+      "label": "Trivial (Docs, Formatting, Boilerplate)",
+      "description": "Prioritizes basic code generation at minimal cost",
+      "weights": {
+        "code_generation": 0.60,
+        "cli_execution": 0.20,
+        "reasoning_planning": 0.20,
+        "agentic_swe": 0.00
+      }
+    }
+  }
+}

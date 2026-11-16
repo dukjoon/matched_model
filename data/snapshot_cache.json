@@ -1,0 +1,59 @@
+{
+  "observations": [
+    { "source": "deepswe", "model": "GPT 6.1 Sol", "raw_score": 61.5, "cost_usd": 0.65 },
+    { "source": "deepswe", "model": "GPT 6 Astra", "raw_score": 64.0, "cost_usd": 2.50 },
+    { "source": "deepswe", "model": "GPT 6.1 Terra", "raw_score": 54.0, "cost_usd": 0.40 },
+    { "source": "deepswe", "model": "Claude Opus 5.5", "raw_score": 71.2, "cost_usd": 5.98 },
+    { "source": "deepswe", "model": "Claude Sonnet 5.5", "raw_score": 68.4, "cost_usd": 3.50 },
+    { "source": "deepswe", "model": "Gemini 4 Carbon", "raw_score": 65.8, "cost_usd": 1.99 },
+    { "source": "deepswe", "model": "DeepSeek V4.1", "raw_score": 56.2, "cost_usd": 0.30 },
+    { "source": "deepswe", "model": "Qwen 3.5 Coder", "raw_score": 58.1, "cost_usd": 0.28 },
+    { "source": "deepswe", "model": "Gemini 4 Hydrogen", "raw_score": 61.9, "cost_usd": 0.85 },
+
+    { "source": "artificial_analysis", "model": "GPT 6.1 Sol", "raw_score": 52.0, "cost_usd": 0.65 },
+    { "source": "artificial_analysis", "model": "GPT 6 Astra", "raw_score": 56.5, "cost_usd": 2.50 },
+    { "source": "artificial_analysis", "model": "GPT 6.1 Terra", "raw_score": 45.5, "cost_usd": 0.40 },
+    { "source": "artificial_analysis", "model": "GPT 6 Sol", "raw_score": 39.5, "cost_usd": 0.85 },
+    { "source": "artificial_analysis", "model": "GPT 6 Luna", "raw_score": 24.5, "cost_usd": 0.08 },
+    { "source": "artificial_analysis", "model": "Claude Opus 5.5", "raw_score": 60.5, "cost_usd": 5.98 },
+    { "source": "artificial_analysis", "model": "Claude Sonnet 5.5", "raw_score": 54.8, "cost_usd": 3.50 },
+    { "source": "artificial_analysis", "model": "Gemini 4 Carbon", "raw_score": 58.0, "cost_usd": 1.99 },
+    { "source": "artificial_analysis", "model": "DeepSeek V4.1", "raw_score": 46.0, "cost_usd": 0.30 },
+    { "source": "artificial_analysis", "model": "Qwen 3.5 Coder", "raw_score": 47.2, "cost_usd": 0.28 },
+    { "source": "artificial_analysis", "model": "Gemini 4 Hydrogen", "raw_score": 53.5, "cost_usd": 0.85 },
+
+    { "source": "swebench", "model": "Claude Opus 5.5", "raw_score": 74.5, "cost_usd": 5.98 },
+    { "source": "swebench", "model": "Claude Sonnet 5.5", "raw_score": 70.2, "cost_usd": 3.50 },
+    { "source": "swebench", "model": "GPT 6.1 Sol", "raw_score": 63.0, "cost_usd": 0.65 },
+    { "source": "swebench", "model": "GPT 6 Astra", "raw_score": 66.4, "cost_usd": 2.50 },
+    { "source": "swebench", "model": "Gemini 4 Carbon", "raw_score": 67.1, "cost_usd": 1.99 },
+    { "source": "swebench", "model": "DeepSeek V4.1", "raw_score": 57.5, "cost_usd": 0.30 },
+    { "source": "swebench", "model": "Qwen 3.5 Coder", "raw_score": 59.0, "cost_usd": 0.28 },
+
+    { "source": "livebench", "model": "GPT 6 Astra", "raw_score": 76.0, "cost_usd": 2.50 },
+    { "source": "livebench", "model": "Gemini 4 Carbon", "raw_score": 75.4, "cost_usd": 1.99 },
+    { "source": "livebench", "model": "Claude Opus 5.5", "raw_score": 74.8, "cost_usd": 5.98 },
+    { "source": "livebench", "model": "GPT 6.1 Sol", "raw_score": 69.2, "cost_usd": 0.65 },
+    { "source": "livebench", "model": "Gemini 4 Hydrogen", "raw_score": 70.8, "cost_usd": 0.85 },
+    { "source": "livebench", "model": "DeepSeek V4.1", "raw_score": 64.1, "cost_usd": 0.30 },
+
+    { "source": "aider", "model": "Claude Sonnet 5.5", "raw_score": 82.5, "cost_usd": 3.50 },
+    { "source": "aider", "model": "Claude Opus 5.5", "raw_score": 81.9, "cost_usd": 5.98 },
+    { "source": "aider", "model": "GPT 6.1 Sol", "raw_score": 76.4, "cost_usd": 0.65 },
+    { "source": "aider", "model": "Qwen 3.5 Coder", "raw_score": 74.0, "cost_usd": 0.28 },
+    { "source": "aider", "model": "DeepSeek V4.1", "raw_score": 71.2, "cost_usd": 0.30 },
+    { "source": "aider", "model": "GPT 6.1 Terra", "raw_score": 68.5, "cost_usd": 0.40 },
+
+    { "source": "terminal_bench", "model": "GPT 6.1 Sol", "raw_score": 62.0, "cost_usd": 0.65 },
+    { "source": "terminal_bench", "model": "Claude Opus 5.5", "raw_score": 64.5, "cost_usd": 5.98 },
+    { "source": "terminal_bench", "model": "Gemini 4 Carbon", "raw_score": 59.8, "cost_usd": 1.99 },
+    { "source": "terminal_bench", "model": "GPT 6.1 Terra", "raw_score": 53.0, "cost_usd": 0.40 },
+    { "source": "terminal_bench", "model": "DeepSeek V4.1", "raw_score": 51.4, "cost_usd": 0.30 },
+
+    { "source": "lmsys", "model": "Gemini 4 Carbon", "raw_score": 1412, "cost_usd": 1.99 },
+    { "source": "lmsys", "model": "Claude Opus 5.5", "raw_score": 1408, "cost_usd": 5.98 },
+    { "source": "lmsys", "model": "GPT 6 Astra", "raw_score": 1405, "cost_usd": 2.50 },
+    { "source": "lmsys", "model": "GPT 6.1 Sol", "raw_score": 1378, "cost_usd": 0.65 },
+    { "source": "lmsys", "model": "Gemini 4 Hydrogen", "raw_score": 1384, "cost_usd": 0.85 }
+  ]
+}

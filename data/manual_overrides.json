@@ -1,0 +1,130 @@
+{
+  "models": [
+    {
+      "id": "gpt-6.1-sol",
+      "name": "Codex: GPT-6.1 Sol",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#10b981",
+      "steps": [
+        { "level": "Low",  "cost": 0.16, "score": 48.0 },
+        { "level": "Med",  "cost": 0.65, "score": 51.5 },
+        { "level": "High", "cost": 1.05, "score": 53.5 },
+        { "level": "Max",  "cost": 1.50, "score": 55.0 }
+      ]
+    },
+    {
+      "id": "gpt-6-astra",
+      "name": "Codex: GPT-6 Astra",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#06b6d4",
+      "steps": [
+        { "level": "Low",  "cost": 1.20, "score": 47.0 },
+        { "level": "Med",  "cost": 2.50, "score": 51.2 },
+        { "level": "High", "cost": 4.80, "score": 54.5 },
+        { "level": "Max",  "cost": 7.04, "score": 57.0 }
+      ]
+    },
+    {
+      "id": "gpt-6.1-terra",
+      "name": "Codex: GPT-6.1 Terra",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#3b82f6",
+      "steps": [
+        { "level": "Low",  "cost": 0.18, "score": 40.0 },
+        { "level": "Med",  "cost": 0.40, "score": 45.0 },
+        { "level": "High", "cost": 0.55, "score": 48.2 },
+        { "level": "Max",  "cost": 0.69, "score": 51.0 }
+      ]
+    },
+    {
+      "id": "gpt-6-sol",
+      "name": "Codex: GPT-6 Sol (구형)",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#6ee7b7",
+      "steps": [
+        { "level": "Low",  "cost": 0.40, "score": 35.0 },
+        { "level": "Med",  "cost": 0.85, "score": 39.5 },
+        { "level": "High", "cost": 1.40, "score": 42.0 },
+        { "level": "Max",  "cost": 2.47, "score": 44.0 }
+      ]
+    },
+    {
+      "id": "gpt-6-luna",
+      "name": "Codex: GPT-6 Luna",
+      "provider": "openai",
+      "harness": "codex-cli",
+      "isCodex": true,
+      "color": "#818cf8",
+      "steps": [
+        { "level": "Low",  "cost": 0.04, "score": 21.0 },
+        { "level": "Med",  "cost": 0.08, "score": 24.5 },
+        { "level": "High", "cost": 0.12, "score": 26.5 },
+        { "level": "Max",  "cost": 0.16, "score": 28.0 }
+      ]
+    },
+    {
+      "id": "claude-opus-5.5",
+      "name": "Claude Code: Opus 5.5",
+      "provider": "anthropic",
+      "harness": "claude-code",
+      "isCodex": false,
+      "color": "#f43f5e",
+      "steps": [
+        { "level": "Low",  "cost": 2.80,  "score": 53.0 },
+        { "level": "Med",  "cost": 5.98,  "score": 58.2 },
+        { "level": "High", "cost": 8.70,  "score": 60.5 },
+        { "level": "Max",  "cost": 11.42, "score": 62.0 }
+      ]
+    },
+    {
+      "id": "claude-sonnet-5.5",
+      "name": "Claude Code: Sonnet 5.5",
+      "provider": "anthropic",
+      "harness": "claude-code",
+      "isCodex": false,
+      "color": "#fb923c",
+      "steps": [
+        { "level": "Low",  "cost": 1.80,  "score": 49.5 },
+        { "level": "Med",  "cost": 3.50,  "score": 54.0 },
+        { "level": "High", "cost": 7.60,  "score": 57.2 },
+        { "level": "Max",  "cost": 13.30, "score": 59.3 }
+      ]
+    },
+    {
+      "id": "gemini-4-carbon",
+      "name": "Gemini CLI: 4 Carbon",
+      "provider": "google",
+      "harness": "gemini-cli",
+      "isCodex": false,
+      "color": "#2dd4bf",
+      "steps": [
+        { "level": "Low",  "cost": 0.90,  "score": 48.0 },
+        { "level": "Med",  "cost": 1.99,  "score": 52.5 },
+        { "level": "High", "cost": 4.29,  "score": 56.5 },
+        { "level": "Max",  "cost": 6.59,  "score": 60.1 }
+      ]
+    },
+    {
+      "id": "deepseek-v4.1",
+      "name": "Open Harness: DeepSeek V4.1",
+      "provider": "deepseek",
+      "harness": "open-harness",
+      "isCodex": false,
+      "color": "#c084fc",
+      "steps": [
+        { "level": "Low",  "cost": 0.18, "score": 42.0 },
+        { "level": "Med",  "cost": 0.30, "score": 45.5 },
+        { "level": "High", "cost": 0.39, "score": 47.3 },
+        { "level": "Max",  "cost": 0.55, "score": 48.0 }
+      ]
+    }
+  ]
+}
